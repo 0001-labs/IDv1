@@ -1,0 +1,56 @@
+# IDv1
+
+Short codes whose shape says what they name. Every code is six characters, and one look at it tells an account from a list or an item, so a single address, `example.com/<code>`, can open any of them and never two at once.
+
+| What | Shape | Example | How many |
+|---|---|---|---|
+| Account | two letters, four digits | `Jo4712` | 27 million |
+| Product | four letters, two digits | `AbCd12` | 731 million |
+| List | two digits, four letters | `12ABCD` | 46 million |
+| Item | two letters, two digits, two letters or digits that are not both digits | `Ab12Cd` | 1 billion |
+
+- **Capitals matter.** `Ab12Cd` and `ab12cd` are two codes.
+- **An account's letters come from the person's name**, a capital and a small one: Leo is `Le0125`, Henrik `He0422`. A name without two Latin letters takes them from the email address, and failing that at random. The digits are drawn until the code is free.
+- **A product's code is scanned, never typed.** Whoever signs up with a product's code may keep it as their account's code, so it is an account's shape too. Codes whose letters spell a rude or awkward word in any language the products speak, capitals aside, are drawn again (`words.ts`).
+- **New lists draw four capitals.** Older lists may hold small letters, and every check reads both.
+- **An item never ends in two digits**, or it would be an account.
+- **A code does not change by itself.** A product may give an account a chosen code, as when it should match the code its owner has elsewhere.
+
+## The scannable code
+
+`scanCode.ts` turns any six-character code into a strip of 16 × 4 cells (64 bits: a format byte, the code in five bytes, a two-byte check) and reads it back from a camera frame. Any single damaged cell fails the check rather than reading wrong. `scanCodePath` draws the strip as SVG; `readRgbaScanFrame`, `locateRgbaScanFrame` and `StableScan` read it from camera pixels, also when it is written on paper beside other marks.
+
+## What is in here
+
+- `src/shapes.ts` — the patterns (`ACCOUNT_CODE`, `PRODUCT_CODE`, `LIST_CODE`, `ITEM_CODE`), `codeKind`, the candidates each shape is drawn from, and `nameLetters`
+- `src/space.ts` — `ID_SPACE`, how many codes of each kind there can be, and `idUsage`
+- `src/words.ts` — the words and digits a product's code must never spell
+- `src/scanCode.ts`, `src/scanCodeDrawing.ts` — the scannable code
+- `tests/` — the shapes, the counts and the scannable code
+
+## Using it
+
+```bash
+vp add @0001-labs/idv1
+```
+
+```ts
+import { accountCodeCandidate, codeKind, nameLetters } from '@0001-labs/idv1'
+
+codeKind('Ab12Cd') // 'item'
+const code = accountCodeCandidate(nameLetters('Leo Andersen')) // Le0125, say
+```
+
+A candidate is only a code to try: keep it when nothing in your database holds it yet, and draw again when something does. Store the code on the row beside the database's own id, with an index on it, and look rows up by it.
+
+## Development
+
+```bash
+vp install
+vp run check
+vp test run
+```
+
+## Licence
+
+MIT

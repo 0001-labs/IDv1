@@ -1,0 +1,44 @@
+{
+  "name": "@0001-labs/idv1",
+  "version": "0.1.0",
+  "description": "Short codes whose shape says what they name: accounts, products, lists and items, how many there can be, and the scannable code that carries them.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0001-labs/IDv1.git"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
+  "packageManager": "pnpm@11.7.0",
+  "scripts": {
+    "check": "vp exec tsc --noEmit",
+    "test": "vp test run",
+    "release": "node scripts/release.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "typescript": "^6.0.3",
+    "vite": "catalog:",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.7.0",
+      "onFail": "error"
+    },
+    "runtime": {
+      "name": "node",
+      "version": ">=22.12.0",
+      "onFail": "error"
+    }
+  }
+}
