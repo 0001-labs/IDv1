@@ -20,7 +20,7 @@ System node: `id1` ([map](https://system.0001.dev/system?focus=id1)). Follow the
 
 ## Putting it in a product
 
-Copy it with Sync 1: `"ID 1": { "ids": { "to": "shared/idv1" } }` in the product's `sync.json`, then `sync1`. The folder belongs to the copy whole; never edit it. The product keeps its own database side: drawing a candidate until it is free, the `code` field and its `by_code` index, a backfill, and its own words for the kinds (Peer calls an item a listing, Ins a clip).
+Copy it with Sync 1: `"ID 1": { "ids": { "to": "shared/idv1" } }` in the product's `sync.json`, then `sync1`. The folder belongs to the copy whole; never edit it. The product keeps its own database side: drawing a candidate until it is free, the `code` field and its `by_code` index, a backfill, and its own words for the kinds (Peer calls an item a listing, Ins a clip and a list a category). Choose the shape by what the thing is, as README's "Which shape for what you build" table says: a person is an account, something that holds things is a list, one thing kept is an item. Draw codes with `codeCandidate(kind)` and read them with `isCodeOf(kind, …)` rather than a product's own patterns.
 
 ## Git commits
 

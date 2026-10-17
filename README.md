@@ -16,13 +16,36 @@ Short codes whose shape says what they name. Every code is six characters, and o
 - **An item never ends in two digits**, or it would be an account.
 - **A code does not change by itself.** A product may give an account a chosen code, as when it should match the code its owner has elsewhere.
 
+## Which shape for what you build
+
+Pick the shape by what the thing is, not by what a product calls it, so the same kind of thing has the same shape in every product and a code is easy to place on sight:
+
+| What it is | Shape | Called in products | Example |
+|---|---|---|---|
+| A person | account | user, member, owner | `Jo4712` |
+| Something that holds things | list | list, category, board, collection, folder, project | `12ABCD` |
+| One thing kept | item | item, clip, listing, note, a piece of inspiration | `Ab12Cd` |
+| A thing in the world with a code printed on it | product | product, tag, sticker | `AbCd12` |
+
+Two products agree without asking each other: a category in one is a list's shape like a list in another, and a piece of inspiration is an item's shape like an item anywhere.
+
+```ts
+import { codeCandidate, codeKind, isCodeOf, nameLetters } from '@0001-labs/idv1'
+
+codeCandidate('list')                                           // a category: 47KQWE
+codeCandidate('item')                                           // a piece: Ab12Cd
+codeCandidate('account', { letters: nameLetters('Leo Andersen') }) // a person: Le0125
+isCodeOf('list', '47KQWE')                                      // true
+codeKind('Ab12Cd')                                              // 'item'
+```
+
 ## The scannable code
 
 `scanCode.ts` turns any six-character code into a strip of 16 × 4 cells (64 bits: a format byte, the code in five bytes, a two-byte check) and reads it back from a camera frame. Any single damaged cell fails the check rather than reading wrong. `scanCodePath` draws the strip as SVG; `readRgbaScanFrame`, `locateRgbaScanFrame` and `StableScan` read it from camera pixels, also when it is written on paper beside other marks.
 
 ## What is in here
 
-- `src/shapes.ts` — the patterns (`ACCOUNT_CODE`, `PRODUCT_CODE`, `LIST_CODE`, `ITEM_CODE`), `codeKind`, the candidates each shape is drawn from, and `nameLetters`
+- `src/shapes.ts` — the patterns (`ACCOUNT_CODE`, `PRODUCT_CODE`, `LIST_CODE`, `ITEM_CODE`, and `CODE_PATTERN` by kind), `codeKind`, `isCodeOf`, the candidates each shape is drawn from (`codeCandidate` by kind), and `nameLetters`
 - `src/space.ts` — `ID_SPACE`, how many codes of each kind there can be, and `idUsage`
 - `src/words.ts` — the words and digits a product's code must never spell
 - `src/scanCode.ts`, `src/scanCodeDrawing.ts` — the scannable code

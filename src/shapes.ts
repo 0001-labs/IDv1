@@ -118,6 +118,26 @@ export function itemCodeCandidate(random: Random = Math.random): string {
   return start + (/\d/.test(first) && /\d/.test(second) ? pick(LETTERS, random) : first) + second
 }
 
+/** The pattern each kind is read by. */
+export const CODE_PATTERN: Record<CodeKind, RegExp> = { account: ACCOUNT_CODE, product: PRODUCT_CODE, list: LIST_CODE, item: ITEM_CODE }
+
+/** Whether a code has the shape of the kind a product expects: `isCodeOf('list', '12ABCD')`. */
+export const isCodeOf = (kind: CodeKind, value: string): boolean => CODE_PATTERN[kind].test(value)
+
+/**
+ * A code to try for any kind, so a product picks the shape by what it names
+ * and never by its pattern: `codeCandidate('list')` for a category,
+ * `codeCandidate('item')` for one thing kept. An account takes the name's
+ * letters (`nameLetters`), or two at random.
+ */
+export function codeCandidate(kind: CodeKind, options: { letters?: string | null; random?: Random } = {}): string {
+  const random = options.random ?? Math.random
+  if (kind === 'account') return accountCodeCandidate(options.letters ?? null, random)
+  if (kind === 'product') return productCodeCandidate(random)
+  if (kind === 'list') return listCodeCandidate(random)
+  return itemCodeCandidate(random)
+}
+
 /**
  * Every way a name-shaped code's two letters can be written, for a product
  * that must keep a code free in all its capitals (Jo4712, jo4712, JO4712, jO4712).

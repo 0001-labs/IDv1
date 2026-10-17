@@ -1,7 +1,7 @@
 import { expect, test } from 'vite-plus/test'
 import {
   accountCodeCandidate, accountCodeCaseVariants, codeKind, itemCodeCandidate, listCodeCandidate,
-  productCodeCandidate, isAccountCode, isItemCode, isListCode, isProductCode,
+  productCodeCandidate, isAccountCode, isItemCode, isListCode, isProductCode, codeCandidate, isCodeOf,
 } from '../src/shapes'
 import { blockedProductCode } from '../src/words'
 
@@ -40,4 +40,18 @@ test('every candidate has its own shape', () => {
 
 test('a name-shaped code in all its capitals', () => {
   expect(accountCodeCaseVariants('Jo4712').sort()).toEqual(['JO4712', 'Jo4712', 'jO4712', 'jo4712'])
+})
+
+test('a candidate is drawn by the kind it names, and read back as that kind', () => {
+  let seed = 7
+  const random = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646
+  for (const kind of ['account', 'product', 'list', 'item'] as const) {
+    for (let i = 0; i < 500; i++) {
+      const code = codeCandidate(kind, { random })
+      expect(isCodeOf(kind, code)).toBe(true)
+      expect(codeKind(code)).toBe(kind)
+    }
+  }
+  expect(codeCandidate('account', { letters: 'Le', random })).toMatch(/^Le\d{4}$/)
+  expect(isCodeOf('list', 'Ab12Cd')).toBe(false)
 })
