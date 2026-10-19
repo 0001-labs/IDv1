@@ -1,6 +1,6 @@
 {
   "name": "@0001-labs/idv1",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Short codes whose shape says what they name: accounts, products, lists and items, how many there can be, and the scannable code that carries them.",
   "license": "MIT",
   "repository": {
