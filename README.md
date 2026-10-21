@@ -15,6 +15,7 @@ Short codes whose shape says what they name. Every code is six characters, and o
 - **New lists draw four capitals.** Older lists may hold small letters, and every check reads both.
 - **An item never ends in two digits**, or it would be an account.
 - **A code does not change by itself.** A product may give an account a chosen code, as when it should match the code its owner has elsewhere.
+- **Some codes are kept for a role.** `RESERVED_ACCOUNT_CODES` names them, and no product draws them for anyone else: the onboarding test account is `On4713` in every product, so it is easy to leave out of the figures.
 
 ## Which shape for what you build
 

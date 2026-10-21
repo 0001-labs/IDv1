@@ -87,8 +87,27 @@ export function nameLetters(name: string, email = ''): string | null {
 /** An account's code: the name's letters (or two at random) and four digits. */
 export function accountCodeCandidate(letters: string | null, random: Random = Math.random): string {
   const start = letters ?? pick(LETTERS, random) + pick(LETTERS, random)
-  return start + String(Math.floor(random() * 10000)).padStart(4, '0')
+  for (;;) {
+    const code = start + String(Math.floor(random() * 10000)).padStart(4, '0')
+    if (!isReservedAccountCode(code)) return code
+  }
 }
+
+/**
+ * Account codes kept for one role in every product, never drawn for anyone
+ * else, so the same account is the same code everywhere and easy to leave out
+ * of a product's figures: the onboarding test account, which walks through a
+ * product as a newcomer would, is On4713. A product gives the code to the
+ * account that plays the role (Ezo's `isOnboardingTestEmail`).
+ */
+export const RESERVED_ACCOUNT_CODES = { onboarding: 'On4713' } as const satisfies Record<string, string>
+
+export type ReservedRole = keyof typeof RESERVED_ACCOUNT_CODES
+
+const RESERVED = new Set(Object.values(RESERVED_ACCOUNT_CODES).map(code => code.toLowerCase()))
+
+/** Whether a code, in any of its capitals, is kept for a role. */
+export const isReservedAccountCode = (code: string): boolean => RESERVED.has(code.toLowerCase())
 
 /**
  * A product's code: four letters, capital or small, and two digits. Nobody
