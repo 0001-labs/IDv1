@@ -7,17 +7,16 @@
     "type": "git",
     "url": "https://github.com/0001-labs/IDv1.git"
   },
-  "type": "module",
-  "exports": {
-    ".": "./src/index.ts",
-    "./advanced": "./src/advanced.ts"
-  },
   "files": [
     "src/",
     "README.md",
     "LICENSE"
   ],
-  "packageManager": "pnpm@11.7.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./advanced": "./src/advanced.ts"
+  },
   "scripts": {
     "check": "vp exec tsc --noEmit",
     "test": "vp test run",
@@ -27,8 +26,7 @@
     "@types/node": "^22.13.1",
     "typescript": "^6.0.3",
     "vite": "catalog:",
-    "vite-plus": "catalog:",
-    "vitest": "catalog:"
+    "vite-plus": "catalog:"
   },
   "devEngines": {
     "packageManager": {
@@ -41,5 +39,6 @@
       "version": ">=22.12.0",
       "onFail": "error"
     }
-  }
+  },
+  "packageManager": "pnpm@11.7.0"
 }
