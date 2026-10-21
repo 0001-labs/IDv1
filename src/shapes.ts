@@ -117,10 +117,13 @@ export const RESERVED_ACCOUNT_EMAILS = {
 /** Codes a role once had, still never drawn for anyone else: the onboarding test account was On4713 before On0001. */
 export const FORMER_RESERVED_ACCOUNT_CODES = ['On4713'] as const
 
-const RESERVED = new Set([...Object.values(RESERVED_ACCOUNT_CODES), ...FORMER_RESERVED_ACCOUNT_CODES].map(code => code.toLowerCase()))
+// Built on first use rather than when the module loads, so a page that only reads codes leaves the
+// reserved ones out of its bundle: a bundler keeps a top-level `new Set(…)` in case it has side effects.
+let reserved: Set<string> | undefined
 
 /** Whether a code, in any of its capitals, is kept for a person or role, now or before. */
-export const isReservedAccountCode = (code: string): boolean => RESERVED.has(code.toLowerCase())
+export const isReservedAccountCode = (code: string): boolean =>
+  (reserved ??= new Set([...Object.values(RESERVED_ACCOUNT_CODES), ...FORMER_RESERVED_ACCOUNT_CODES].map(kept => kept.toLowerCase()))).has(code.toLowerCase())
 
 /** The code kept for an email, else null: a product gives it before drawing one. */
 export function reservedAccountCode(email: string | null | undefined): string | null {
