@@ -94,20 +94,39 @@ export function accountCodeCandidate(letters: string | null, random: Random = Ma
 }
 
 /**
- * Account codes kept for one role in every product, never drawn for anyone
- * else, so the same account is the same code everywhere and easy to leave out
- * of a product's figures: the onboarding test account, which walks through a
- * product as a newcomer would, is On4713. A product gives the code to the
- * account that plays the role (Ezo's `isOnboardingTestEmail`).
+ * Account codes kept for one person or role in every product, never drawn for
+ * anyone else, so the same account is the same code everywhere and easy to
+ * leave out of a product's figures: Joachim is Jo4712 (jaa90@icloud.com) and
+ * Jo0001 (joachim@0001.dev), the onboarding test account, which walks through
+ * a product as a newcomer would, is On0001 (joachim+onboarding@0001.dev), and
+ * the test account is Te0001 (joachim+test@0001.dev). A product gives the code
+ * to the account whose email `reservedAccountCode` names.
  */
-export const RESERVED_ACCOUNT_CODES = { onboarding: 'On4713' } as const satisfies Record<string, string>
+export const RESERVED_ACCOUNT_CODES = { owner: 'Jo4712', studio: 'Jo0001', onboarding: 'On0001', test: 'Te0001' } as const satisfies Record<string, string>
 
 export type ReservedRole = keyof typeof RESERVED_ACCOUNT_CODES
 
-const RESERVED = new Set(Object.values(RESERVED_ACCOUNT_CODES).map(code => code.toLowerCase()))
+/** The email each reserved code belongs to, lower case. */
+export const RESERVED_ACCOUNT_EMAILS = {
+  'jaa90@icloud.com': 'owner',
+  'joachim@0001.dev': 'studio',
+  'joachim+onboarding@0001.dev': 'onboarding',
+  'joachim+test@0001.dev': 'test',
+} as const satisfies Record<string, ReservedRole>
 
-/** Whether a code, in any of its capitals, is kept for a role. */
+/** Codes a role once had, still never drawn for anyone else: the onboarding test account was On4713 before On0001. */
+export const FORMER_RESERVED_ACCOUNT_CODES = ['On4713'] as const
+
+const RESERVED = new Set([...Object.values(RESERVED_ACCOUNT_CODES), ...FORMER_RESERVED_ACCOUNT_CODES].map(code => code.toLowerCase()))
+
+/** Whether a code, in any of its capitals, is kept for a person or role, now or before. */
 export const isReservedAccountCode = (code: string): boolean => RESERVED.has(code.toLowerCase())
+
+/** The code kept for an email, else null: a product gives it before drawing one. */
+export function reservedAccountCode(email: string | null | undefined): string | null {
+  const key = email?.trim().toLowerCase() as keyof typeof RESERVED_ACCOUNT_EMAILS | undefined
+  return key && key in RESERVED_ACCOUNT_EMAILS ? RESERVED_ACCOUNT_CODES[RESERVED_ACCOUNT_EMAILS[key]] : null
+}
 
 /**
  * A product's code: four letters, capital or small, and two digits. Nobody

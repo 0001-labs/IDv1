@@ -15,7 +15,7 @@ Short codes whose shape says what they name. Every code is six characters, and o
 - **New lists draw four capitals.** Older lists may hold small letters, and every check reads both.
 - **An item never ends in two digits**, or it would be an account.
 - **A code does not change by itself.** A product may give an account a chosen code, as when it should match the code its owner has elsewhere.
-- **Some codes are kept for a role.** `RESERVED_ACCOUNT_CODES` names them, and no product draws them for anyone else: the onboarding test account is `On4713` in every product, so it is easy to leave out of the figures.
+- **Some codes are kept for a person or a role.** `RESERVED_ACCOUNT_CODES` names them, `RESERVED_ACCOUNT_EMAILS` says whose they are, and no product draws them for anyone else: Joachim is `Jo4712` (jaa90@icloud.com) and `Jo0001` (joachim@0001.dev), the onboarding test account is `On0001` (joachim+onboarding@0001.dev, `On4713` before) and the test account is `Te0001` (joachim+test@0001.dev). A product gives the code `reservedAccountCode(email)` returns before drawing one, so the same person is the same code in every product and easy to leave out of the figures.
 
 ## Which shape for what you build
 
